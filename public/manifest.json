@@ -1,0 +1,13 @@
+{
+  "short_name": "Money Maker",
+  "name": "Money Maker — Do Now Familia",
+  "description": "Control financiero familiar con sincronización en tiempo real",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0a0f1e",
+  "background_color": "#0a0f1e",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "favicon.ico", "sizes": "64x64", "type": "image/x-icon" }
+  ]
+}
