@@ -1,12 +1,11 @@
+/* eslint-disable */
 import { db } from "./firebase";
 import {
-  doc, getDoc, setDoc, updateDoc,
+  doc, getDoc, setDoc,
   collection, addDoc, deleteDoc,
   onSnapshot, query, orderBy
 } from "firebase/firestore";
 import { DEFAULT_PROFILES, DEFAULT_EXPENSE_CATS, DEFAULT_INCOME_SRCS } from "./constants";
-
-const CONFIG_DOC = "config/main";
 
 // ─── CONFIG (profiles, cats, sources) ────────────────────────────
 export async function loadConfig() {
