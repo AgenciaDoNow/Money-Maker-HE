@@ -15,11 +15,11 @@ import {
 } from "recharts";
 import "./App.css";
 
-// â”€â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── HELPERS ─────────────────────────────────────────────────────
 const sumI = (txs) => txs.filter(t => t.type === "ingreso").reduce((s, t) => s + toMXN(t.amount, t.currency), 0);
 const sumE = (txs) => txs.filter(t => t.type === "gasto").reduce((s, t) => s + toMXN(t.amount, t.currency), 0);
 
-// â”€â”€â”€ APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── APP ──────────────────────────────────────────────────────────
 export default function App() {
   const [config, setConfig] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -66,7 +66,7 @@ export default function App() {
     setTimeout(() => setToast(null), 2400);
   }, []);
 
-  // â”€â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── LOGIN ─────────────────────────────────────────────────────
   const handleProfileSelect = (p) => {
     setSelProfile(p);
     setPin("");
@@ -74,7 +74,7 @@ export default function App() {
   };
 
   const handlePinKey = (k) => {
-    if (k === "â†") { setPin(p => p.slice(0, -1)); setPinErr(""); return; }
+    if (k === "←") { setPin(p => p.slice(0, -1)); setPinErr(""); return; }
     if (pin.length >= 4) return;
     const newPin = pin + k;
     setPin(newPin);
@@ -92,11 +92,11 @@ export default function App() {
     }
   };
 
-  // â”€â”€â”€ ADD TX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── ADD TX ────────────────────────────────────────────────────
   const handleAddTx = async () => {
     const amount = parseFloat(addAmount);
-    if (!amount || amount <= 0) return showToast("Ingresa un monto vÃ¡lido", false);
-    if (addType === "gasto" && !addCat) return showToast("Selecciona una categorÃ­a", false);
+    if (!amount || amount <= 0) return showToast("Ingresa un monto válido", false);
+    if (addType === "gasto" && !addCat) return showToast("Selecciona una categoría", false);
     if (addType === "ingreso" && !addSrc) return showToast("Selecciona la fuente", false);
     const tx = {
       type: addType, date: addDate, amount, currency: addCurrency,
@@ -109,7 +109,7 @@ export default function App() {
     };
     try {
       await addTransaction(tx);
-      showToast("âœ“ Guardado y sincronizado");
+      showToast("✓ Guardado y sincronizado");
       setAddAmount(""); setAddDesc(""); setAddCat(""); setAddSrc(""); setAddProject("");
       setScreen("main");
     } catch (e) {
@@ -122,7 +122,7 @@ export default function App() {
     catch { showToast("Error al eliminar", false); }
   };
 
-  // â”€â”€â”€ CONFIG UPDATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── CONFIG UPDATES ───────────────────────────────────────────
   const updateConfig = async (updates) => {
     const updated = { ...config, ...updates };
     setConfig(updated);
@@ -133,13 +133,13 @@ export default function App() {
     const newCat = { id: "c_" + uid(), label: name, icon, color, custom: true };
     const updated = [...(config.expenseCats || []), newCat];
     await updateConfig({ expenseCats: updated });
-    showToast("CategorÃ­a agregada");
+    showToast("Categoría agregada");
   };
 
   const handleDeleteCat = async (id) => {
     const updated = (config.expenseCats || []).filter(c => c.id !== id);
     await updateConfig({ expenseCats: updated });
-    showToast("CategorÃ­a eliminada");
+    showToast("Categoría eliminada");
   };
 
   const handleAddSrc = async (name, icon, color, owner) => {
@@ -191,7 +191,7 @@ export default function App() {
     return true;
   });
 
-  // â”€â”€â”€ RENDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── RENDER ───────────────────────────────────────────────────
   if (screen === "login") {
     return (
       <LoginScreen
@@ -249,27 +249,27 @@ export default function App() {
   );
 }
 
-// â”€â”€â”€ LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── LOADING ──────────────────────────────────────────────────────
 function LoadingScreen() {
   return (
     <div className="loading-screen">
-      <div className="loading-logo">ðŸ’°</div>
+      <div className="loading-logo">🤑</div>
       <div className="loading-title">Money Maker</div>
       <div className="loading-spinner" />
-      <p className="loading-sub">Conectando con Firebaseâ€¦</p>
+      <p className="loading-sub">Conectando con Firebase…</p>
     </div>
   );
 }
 
-// â”€â”€â”€ LOGIN SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── LOGIN SCREEN ────────────────────────────────────────────────
 function LoginScreen({ profiles, selProfile, pin, pinErr, onSelectProfile, onPinKey, onCancelPin }) {
-  const numKeys = [1, 2, 3, 4, 5, 6, 7, 8, 9, "â†", 0, "âœ“"];
+  const numKeys = [1, 2, 3, 4, 5, 6, 7, 8, 9, "←", 0, "✓"];
   return (
     <div className="login-screen">
       <div className="login-header">
-        <div className="login-logo">ðŸ’°</div>
+        <div className="login-logo">🤑</div>
         <h1 className="login-title">Money Maker</h1>
-        <p className="login-sub">Control financiero familiar Â· Do Now</p>
+        <p className="login-sub">Control financiero familiar &middot; Do Now</p>
       </div>
 
       {!selProfile ? (
@@ -287,7 +287,7 @@ function LoginScreen({ profiles, selProfile, pin, pinErr, onSelectProfile, onPin
         </>
       ) : (
         <div className="pin-area">
-          <p className="pin-label">PIN â€” {selProfile.name}</p>
+          <p className="pin-label">PIN — {selProfile.name}</p>
           <div className="pin-dots">
             {[0, 1, 2, 3].map(i => (
               <div key={i} className={`pin-dot ${i < pin.length ? "filled" : ""}`}
@@ -307,7 +307,7 @@ function LoginScreen({ profiles, selProfile, pin, pinErr, onSelectProfile, onPin
   );
 }
 
-// â”€â”€â”€ MAIN SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── MAIN SCREEN ──────────────────────────────────────────────────
 function MainScreen({
   user, tab, setTab, filterMonth, setFilterMonth, filterYear, setFilterYear,
   transactions, projects, cats, srcs, getCat, getSrc, getFiltered,
@@ -347,20 +347,20 @@ function MainScreen({
     const meta = t.type === "gasto" ? getCat(t.category) : getSrc(t.source);
     return (
       <div key={t._id} className="tx-row">
-        <span className="tx-icon">{meta?.icon || "ðŸ’°"}</span>
+        <span className="tx-icon">{meta?.icon || "🤑"}</span>
         <div className="tx-info">
-          <div className="tx-desc">{t.description || meta?.label || "Sin descripciÃ³n"}</div>
+          <div className="tx-desc">{t.description || meta?.label || "Sin descripción"}</div>
           <div className="tx-meta">
-            {t.date} Â· <span className={`owner-tag ${t.owner === "eduardo" ? "oe" : t.owner === "hilda" ? "oh" : "ob"}`}>{ownerLabel(t.owner)}</span>
-            {t.projectId ? " Â· ðŸŽ¯" : ""}
-            {t.currency && t.currency !== "MXN" ? ` Â· ${t.currency}` : ""}
+            {t.date} · <span className={`owner-tag ${t.owner === "eduardo" ? "oe" : t.owner === "hilda" ? "oh" : "ob"}`}>{ownerLabel(t.owner)}</span>
+            {t.projectId ? " · 🎯" : ""}
+            {t.currency && t.currency !== "MXN" ? ` · ${t.currency}` : ""}
           </div>
         </div>
         <div className="tx-right">
           <span className="tx-amt" style={{ color: t.type === "ingreso" ? "#86efac" : "#fca5a5" }}>
             {t.type === "ingreso" ? "+" : "-"}{fmtAmt(t.amount, t.currency || "MXN")}
           </span>
-          {showDel && <button className="del-btn" onClick={() => onDeleteTx(t._id)}>Ã—</button>}
+          {showDel && <button className="del-btn" onClick={() => onDeleteTx(t._id)}>×</button>}
         </div>
       </div>
     );
@@ -383,7 +383,7 @@ function MainScreen({
             <span className="roi-badge" style={{ color: roiColor, background: roi > 0 ? "rgba(16,185,129,.12)" : roi < 0 ? "rgba(239,68,68,.12)" : "rgba(245,158,11,.12)" }}>
               ROI {roi >= 0 ? "+" : ""}{roi.toFixed(0)}%
             </span>
-            <button className="icon-del" onClick={() => onDeleteProject(p._id)}>Ã—</button>
+            <button className="icon-del" onClick={() => onDeleteProject(p._id)}>×</button>
           </div>
         </div>
         {p.goal > 0 && (
@@ -403,11 +403,11 @@ function MainScreen({
   };
 
   const tabs = [
-    { id: "dashboard", icon: "ðŸ“Š", label: "Resumen" },
-    { id: "history",   icon: "ðŸ“‹", label: "Historial" },
-    { id: "analytics", icon: "ðŸ“ˆ", label: "AnÃ¡lisis" },
-    { id: "projects",  icon: "ðŸŽ¯", label: "Proyectos" },
-    { id: "settings",  icon: "âš™ï¸", label: "Ajustes" },
+    { id: "dashboard", icon: "📊", label: "Resumen" },
+    { id: "history",   icon: "📋", label: "Historial" },
+    { id: "analytics", icon: "📈", label: "Análisis" },
+    { id: "projects",  icon: "🎯", label: "Proyectos" },
+    { id: "settings",  icon: "⚙️", label: "Ajustes" },
   ];
 
   return (
@@ -443,7 +443,7 @@ function MainScreen({
               {[2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
-          <button className="icon-btn" onClick={onLogout} title="Salir">ðŸšª</button>
+          <button className="icon-btn" onClick={onLogout} title="Salir">🚪</button>
         </div>
       </header>
 
@@ -458,7 +458,7 @@ function MainScreen({
           ))}
         </div>
 
-        {/* â”€â”€ DASHBOARD â”€â”€ */}
+        {/* ── DASHBOARD ── */}
         {tab === "dashboard" && (
           <>
             <div className="stat-row">
@@ -467,18 +467,18 @@ function MainScreen({
                 <div className="stat-val" style={{ color: bal >= 0 ? "#86efac" : "#fca5a5" }}>{fmtAmt(bal)}</div>
               </div>
               <div className="stat-card" style={{ background: "linear-gradient(135deg,#064e3b,#059669)" }}>
-                <div className="stat-label">â†‘ Ingresos</div>
+                <div className="stat-label">↑ Ingresos</div>
                 <div className="stat-val">{fmtAmt(inc)}</div>
               </div>
               <div className="stat-card" style={{ background: "linear-gradient(135deg,#7f1d1d,#dc2626)" }}>
-                <div className="stat-label">â†“ Gastos</div>
+                <div className="stat-label">↓ Gastos</div>
                 <div className="stat-val">{fmtAmt(exp)}</div>
               </div>
             </div>
 
             {byCat.length > 0 && (
               <section className="section">
-                <h3 className="sec-title">Top gastos â€” {MONTHS[filterMonth]}</h3>
+                <h3 className="sec-title">Top gastos — {MONTHS[filterMonth]}</h3>
                 {byCat.slice(0, 6).map(c => (
                   <div key={c.id} className="cat-row">
                     <span className="cat-icon">{c.icon}</span>
@@ -509,39 +509,39 @@ function MainScreen({
             )}
 
             <section className="section">
-              <h3 className="sec-title">Ãšltimos movimientos</h3>
+              <h3 className="sec-title">Últimos movimientos</h3>
               {transactions.length === 0
-                ? <p className="empty">Sin movimientos aÃºn. Â¡Toca âž• para agregar!</p>
+                ? <p className="empty">Sin movimientos aún. ¡Toca ➕ para agregar!</p>
                 : transactions.slice(0, 6).map(t => renderTx(t, false))
               }
               {transactions.length > 6 && (
-                <button className="see-all" onClick={() => setTab("history")}>Ver todo â†’</button>
+                <button className="see-all" onClick={() => setTab("history")}>Ver todo →</button>
               )}
             </section>
           </>
         )}
 
-        {/* â”€â”€ HISTORY â”€â”€ */}
+        {/* ── HISTORY ── */}
         {tab === "history" && (
           <>
             <div className="filter-bar">
               {["all", "ingreso", "gasto"].map(f => (
                 <button key={f} className={`filter-btn ${histFilter === f ? "active" : ""}`} onClick={() => setHistFilter(f)}>
-                  {f === "all" ? "Todo" : f === "ingreso" ? "â†‘ Ingresos" : "â†“ Gastos"}
+                  {f === "all" ? "Todo" : f === "ingreso" ? "↑ Ingresos" : "↓ Gastos"}
                 </button>
               ))}
             </div>
-            <p className="hist-count">{histTxs.length} movimientos Â· {MONTHS[filterMonth]} {filterYear}</p>
+            <p className="hist-count">{histTxs.length} movimientos · {MONTHS[filterMonth]} {filterYear}</p>
             <section className="section">
               {histTxs.length === 0
-                ? <p className="empty">Sin movimientos en este perÃ­odo</p>
+                ? <p className="empty">Sin movimientos en este período</p>
                 : histTxs.map(t => renderTx(t, true))
               }
             </section>
           </>
         )}
 
-        {/* â”€â”€ ANALYTICS â”€â”€ */}
+        {/* ── ANALYTICS ── */}
         {tab === "analytics" && (
           <>
             <section className="section">
@@ -576,15 +576,15 @@ function MainScreen({
                     </span>
                   </div>
                   <div className="person-bars">
-                    <div className="pbar green">â†‘ {fmtAmt(o.inc)}</div>
-                    <div className="pbar red">â†“ {fmtAmt(o.exp)}</div>
+                    <div className="pbar green">↑ {fmtAmt(o.inc)}</div>
+                    <div className="pbar red">↓ {fmtAmt(o.exp)}</div>
                   </div>
                 </div>
               ))}
             </section>
 
             <section className="section">
-              <h3 className="sec-title">Ranking gastos â€” {MONTHS[filterMonth]}</h3>
+              <h3 className="sec-title">Ranking gastos — {MONTHS[filterMonth]}</h3>
               {byCat.length === 0
                 ? <p className="empty">Sin gastos este mes</p>
                 : byCat.map((c, i) => (
@@ -603,7 +603,7 @@ function MainScreen({
           </>
         )}
 
-        {/* â”€â”€ PROJECTS â”€â”€ */}
+        {/* ── PROJECTS ── */}
         {tab === "projects" && (
           <>
             <div className="sec-header">
@@ -613,9 +613,9 @@ function MainScreen({
             {projects.length === 0
               ? (
                 <section className="section empty-state">
-                  <div className="empty-icon">ðŸŽ¯</div>
-                  <h3>Sin proyectos aÃºn</h3>
-                  <p>Mide la rentabilidad de cursos, campaÃ±as, plataformas y mÃ¡s.</p>
+                  <div className="empty-icon">🎯</div>
+                  <h3>Sin proyectos aún</h3>
+                  <p>Mide la rentabilidad de cursos, campañas, plataformas y más.</p>
                   <button className="btn-primary-sm" onClick={() => setModal("addProject")}>Crear proyecto</button>
                 </section>
               )
@@ -624,13 +624,13 @@ function MainScreen({
           </>
         )}
 
-        {/* â”€â”€ SETTINGS â”€â”€ */}
+        {/* ── SETTINGS ── */}
         {tab === "settings" && (
           <>
             <section className="section">
-              <h3 className="sec-title">ðŸ‘¤ Mi perfil â€” {user.name}</h3>
+              <h3 className="sec-title">👤 Mi perfil — {user.name}</h3>
               <div className="setting-row">
-                <div><div className="s-label">PIN de acceso</div><div className="s-sub">Cambiar mi PIN de 4 dÃ­gitos</div></div>
+                <div><div className="s-label">PIN de acceso</div><div className="s-sub">Cambiar mi PIN de 4 dígitos</div></div>
                 <button className="s-action" onClick={() => setModal("changePin")}>Cambiar PIN</button>
               </div>
               <div className="setting-row">
@@ -640,20 +640,20 @@ function MainScreen({
             </section>
 
             <section className="section">
-              <h3 className="sec-title">â†“ CategorÃ­as de gasto <span className="sec-count">({cats.length})</span></h3>
+              <h3 className="sec-title">↓ Categorías de gasto <span className="sec-count">({cats.length})</span></h3>
               {cats.map(c => (
                 <div key={c.id} className="custom-item">
                   <div className="ci-left"><span>{c.icon}</span><span>{c.label}</span></div>
                   {c.custom
-                    ? <button className="ci-del" onClick={() => onDeleteCat(c.id)}>Ã—</button>
+                    ? <button className="ci-del" onClick={() => onDeleteCat(c.id)}>×</button>
                     : <span className="ci-default">default</span>}
                 </div>
               ))}
-              <button className="add-custom-btn blue" onClick={() => setModal("addCat")}>+ Nueva categorÃ­a</button>
+              <button className="add-custom-btn blue" onClick={() => setModal("addCat")}>+ Nueva categoría</button>
             </section>
 
             <section className="section">
-              <h3 className="sec-title">â†‘ Fuentes de ingreso <span className="sec-count">({srcs.length})</span></h3>
+              <h3 className="sec-title">↑ Fuentes de ingreso <span className="sec-count">({srcs.length})</span></h3>
               {srcs.map(s => (
                 <div key={s.id} className="custom-item">
                   <div className="ci-left">
@@ -661,7 +661,7 @@ function MainScreen({
                     <span style={{ color: s.owner === "hilda" ? "#f9a8d4" : s.owner === "eduardo" ? "#93c5fd" : "#94a3b8" }}>{s.label}</span>
                   </div>
                   {s.custom
-                    ? <button className="ci-del" onClick={() => onDeleteSrc(s.id)}>Ã—</button>
+                    ? <button className="ci-del" onClick={() => onDeleteSrc(s.id)}>×</button>
                     : <span className="ci-default">default</span>}
                 </div>
               ))}
@@ -673,17 +673,17 @@ function MainScreen({
 
       {/* Bottom nav */}
       <nav className="bottom-nav">
-        <button className={`nav-btn ${tab === "dashboard" ? "active" : ""}`} onClick={() => setTab("dashboard")}><span>ðŸ“Š</span><span>Resumen</span></button>
-        <button className="nav-btn add-nav" onClick={onAddScreen}><span>âž•</span><span>Agregar</span></button>
-        <button className={`nav-btn ${tab === "projects" ? "active" : ""}`} onClick={() => setTab("projects")}><span>ðŸŽ¯</span><span>Proyectos</span></button>
-        <button className={`nav-btn ${tab === "analytics" ? "active" : ""}`} onClick={() => setTab("analytics")}><span>ðŸ“ˆ</span><span>AnÃ¡lisis</span></button>
-        <button className={`nav-btn ${tab === "settings" ? "active" : ""}`} onClick={() => setTab("settings")}><span>âš™ï¸</span><span>Ajustes</span></button>
+        <button className={`nav-btn ${tab === "dashboard" ? "active" : ""}`} onClick={() => setTab("dashboard")}><span>📊</span><span>Resumen</span></button>
+        <button className="nav-btn add-nav" onClick={onAddScreen}><span>➕</span><span>Agregar</span></button>
+        <button className={`nav-btn ${tab === "projects" ? "active" : ""}`} onClick={() => setTab("projects")}><span>🎯</span><span>Proyectos</span></button>
+        <button className={`nav-btn ${tab === "analytics" ? "active" : ""}`} onClick={() => setTab("analytics")}><span>📈</span><span>Análisis</span></button>
+        <button className={`nav-btn ${tab === "settings" ? "active" : ""}`} onClick={() => setTab("settings")}><span>⚙️</span><span>Ajustes</span></button>
       </nav>
     </div>
   );
 }
 
-// â”€â”€â”€ ADD SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ADD SCREEN ───────────────────────────────────────────────────
 function AddScreen({
   addType, setAddType, addCat, setAddCat, addSrc, setAddSrc,
   addOwner, setAddOwner, addAmount, setAddAmount, addCurrency, setAddCurrency,
@@ -694,14 +694,14 @@ function AddScreen({
   return (
     <div className="app">
       <header className="topbar">
-        <button className="back-btn" onClick={onBack}>â† Volver</button>
+        <button className="back-btn" onClick={onBack}>← Volver</button>
         <div className="topbar-title">Nuevo movimiento</div>
         <div style={{ width: 70 }} />
       </header>
       <div className="form-wrap">
         <div className="type-toggle">
-          <button className={`type-btn ${addType === "gasto" ? "tg" : ""}`} onClick={() => setAddType("gasto")}>â†“ Gasto</button>
-          <button className={`type-btn ${addType === "ingreso" ? "ti" : ""}`} onClick={() => setAddType("ingreso")}>â†‘ Ingreso</button>
+          <button className={`type-btn ${addType === "gasto" ? "tg" : ""}`} onClick={() => setAddType("gasto")}>↓ Gasto</button>
+          <button className={`type-btn ${addType === "ingreso" ? "ti" : ""}`} onClick={() => setAddType("ingreso")}>↑ Ingreso</button>
         </div>
 
         <label className="flabel">Fecha</label>
@@ -717,7 +717,7 @@ function AddScreen({
 
         {addType === "gasto" && (
           <>
-            <label className="flabel">CategorÃ­a</label>
+            <label className="flabel">Categoría</label>
             <div className="chip-grid">
               {cats.map(c => (
                 <button key={c.id} className={`chip ${addCat === c.id ? "sel" : ""}`}
@@ -749,34 +749,34 @@ function AddScreen({
           {projects.map(p => <option key={p._id} value={p._id}>{p.icon} {p.name}</option>)}
         </select>
 
-        <label className="flabel">DescripciÃ³n</label>
-        <input value={addDesc} onChange={e => setAddDesc(e.target.value)} placeholder="Ej: Gasolina, pago clienteâ€¦" className="finput" />
+        <label className="flabel">Descripción</label>
+        <input value={addDesc} onChange={e => setAddDesc(e.target.value)} placeholder="Ej: Gasolina, pago cliente…" className="finput" />
 
-        <label className="flabel">Â¿QuiÃ©n registra?</label>
+        <label className="flabel">¿Quién registra?</label>
         <div className="type-toggle" style={{ marginBottom: 14 }}>
-          <button className={`type-btn ${addOwner === "eduardo" ? "tg" : ""}`} onClick={() => setAddOwner("eduardo")}>ðŸ‘¤ Eduardo</button>
-          <button className={`type-btn ${addOwner === "hilda" ? "ti" : ""}`} onClick={() => setAddOwner("hilda")}>ðŸ‘© Hilda</button>
-          <button className={`type-btn ${addOwner === "ambos" ? "tb" : ""}`} onClick={() => setAddOwner("ambos")}>ðŸ‘« Ambos</button>
+          <button className={`type-btn ${addOwner === "eduardo" ? "tg" : ""}`} onClick={() => setAddOwner("eduardo")}>👤 Eduardo</button>
+          <button className={`type-btn ${addOwner === "hilda" ? "ti" : ""}`} onClick={() => setAddOwner("hilda")}>👩 Hilda</button>
+          <button className={`type-btn ${addOwner === "ambos" ? "tb" : ""}`} onClick={() => setAddOwner("ambos")}>👫 Ambos</button>
         </div>
 
-        <label className="flabel">MÃ©todo de pago</label>
+        <label className="flabel">Método de pago</label>
         <select value={addMethod} onChange={e => setAddMethod(e.target.value)} className="finput">
-          <option value="efectivo">ðŸ’µ Efectivo</option>
-          <option value="debito">ðŸ’³ Tarjeta dÃ©bito</option>
-          <option value="credito">ðŸ’³ Tarjeta crÃ©dito</option>
-          <option value="transferencia">ðŸ¦ Transferencia</option>
-          <option value="paypal">ðŸ…¿ï¸ PayPal</option>
-          <option value="stripe">ðŸ’³ Stripe</option>
+          <option value="efectivo">💵 Efectivo</option>
+          <option value="debito">💳 Tarjeta débito</option>
+          <option value="credito">💳 Tarjeta crédito</option>
+          <option value="transferencia">🏦 Transferencia</option>
+          <option value="paypal">🅿️ PayPal</option>
+          <option value="stripe">💳 Stripe</option>
           <option value="otro">Otro</option>
         </select>
 
-        <button className="save-btn" onClick={onSave}>âœ“ Guardar y sincronizar</button>
+        <button className="save-btn" onClick={onSave}>✓ Guardar y sincronizar</button>
       </div>
     </div>
   );
 }
 
-// â”€â”€â”€ MODAL WRAPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── MODAL WRAPPER ────────────────────────────────────────────────
 function Modal({ children, onClose }) {
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
@@ -785,16 +785,16 @@ function Modal({ children, onClose }) {
   );
 }
 
-// â”€â”€â”€ ADD CAT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ADD CAT MODAL ────────────────────────────────────────────────
 function AddCatModal({ onSave, onClose }) {
   const [name, setName] = useState("");
-  const [icon, setIcon] = useState("ðŸ“Œ");
+  const [icon, setIcon] = useState("📌");
   const [color, setColor] = useState(PALETTE[0]);
   return (
     <>
-      <h3 className="modal-title">+ Nueva categorÃ­a de gasto</h3>
+      <h3 className="modal-title">+ Nueva categoría de gasto</h3>
       <label className="flabel">Nombre</label>
-      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: Mascotas, Ropaâ€¦" className="finput" />
+      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: Mascotas, Ropa…" className="finput" />
       <label className="flabel">Emoji</label>
       <input value={icon} onChange={e => setIcon(e.target.value)} style={{ width: 80, marginBottom: 12 }} />
       <label className="flabel">Color</label>
@@ -809,22 +809,22 @@ function AddCatModal({ onSave, onClose }) {
   );
 }
 
-// â”€â”€â”€ ADD SRC MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ADD SRC MODAL ────────────────────────────────────────────────
 function AddSrcModal({ onSave, onClose }) {
   const [name, setName] = useState("");
-  const [icon, setIcon] = useState("ðŸ’¡");
+  const [icon, setIcon] = useState("💡");
   const [color, setColor] = useState(PALETTE[2]);
   const [owner, setOwner] = useState("eduardo");
   return (
     <>
       <h3 className="modal-title">+ Nueva fuente de ingreso</h3>
       <label className="flabel">Nombre</label>
-      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: ConsultorÃ­as, Freelanceâ€¦" className="finput" />
+      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: Consultorías, Freelance…" className="finput" />
       <label className="flabel">Emoji</label>
       <input value={icon} onChange={e => setIcon(e.target.value)} style={{ width: 80, marginBottom: 12 }} />
-      <label className="flabel">Â¿De quiÃ©n?</label>
+      <label className="flabel">¿De quién?</label>
       <div className="type-toggle" style={{ marginBottom: 12 }}>
-        {[["eduardo", "ðŸ‘¤ Eduardo"], ["hilda", "ðŸ‘© Hilda"], ["ambos", "ðŸ‘« Ambos"]].map(([v, l]) => (
+        {[["eduardo", "👤 Eduardo"], ["hilda", "👩 Hilda"], ["ambos", "👫 Ambos"]].map(([v, l]) => (
           <button key={v} className={`type-btn ${owner === v ? "tb" : ""}`} onClick={() => setOwner(v)}>{l}</button>
         ))}
       </div>
@@ -840,21 +840,21 @@ function AddSrcModal({ onSave, onClose }) {
   );
 }
 
-// â”€â”€â”€ ADD PROJECT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ADD PROJECT MODAL ───────────────────────────────────────────
 function AddProjectModal({ onSave, onClose }) {
   const [name, setName] = useState("");
-  const [icon, setIcon] = useState("ðŸŽ¯");
+  const [icon, setIcon] = useState("🎯");
   const [desc, setDesc] = useState("");
   const [goal, setGoal] = useState("");
   return (
     <>
-      <h3 className="modal-title">ðŸŽ¯ Nuevo proyecto</h3>
+      <h3 className="modal-title">🎯 Nuevo proyecto</h3>
       <label className="flabel">Nombre</label>
-      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: Curso IA 2026, CampaÃ±a Meta Q2" className="finput" />
+      <input value={name} onChange={e => setName(e.target.value)} placeholder="Ej: Curso IA 2026, Campaña Meta Q2" className="finput" />
       <label className="flabel">Emoji</label>
       <input value={icon} onChange={e => setIcon(e.target.value)} style={{ width: 80, marginBottom: 12 }} />
-      <label className="flabel">DescripciÃ³n (opcional)</label>
-      <input value={desc} onChange={e => setDesc(e.target.value)} placeholder="Breve descripciÃ³nâ€¦" className="finput" />
+      <label className="flabel">Descripción (opcional)</label>
+      <input value={desc} onChange={e => setDesc(e.target.value)} placeholder="Breve descripción…" className="finput" />
       <label className="flabel">Meta de ingresos MXN (0 = sin meta)</label>
       <input type="number" value={goal} onChange={e => setGoal(e.target.value)} placeholder="0" className="finput" />
       <div className="modal-btns">
@@ -865,7 +865,7 @@ function AddProjectModal({ onSave, onClose }) {
   );
 }
 
-// â”€â”€â”€ CHANGE PIN MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── CHANGE PIN MODAL ─────────────────────────────────────────────
 function ChangePinModal({ user, onSave, onClose }) {
   const [oldPin, setOldPin] = useState("");
   const [newPin, setNewPin] = useState("");
@@ -873,13 +873,13 @@ function ChangePinModal({ user, onSave, onClose }) {
   const [err, setErr] = useState("");
   const handle = () => {
     if (oldPin !== user.pin) return setErr("PIN actual incorrecto");
-    if (!/^\d{4}$/.test(newPin)) return setErr("El nuevo PIN debe ser 4 dÃ­gitos");
+    if (!/^\d{4}$/.test(newPin)) return setErr("El nuevo PIN debe ser 4 dígitos");
     if (newPin !== conf) return setErr("Los PINs no coinciden");
     onSave(newPin);
   };
   return (
     <>
-      <h3 className="modal-title">ðŸ” Cambiar PIN â€” {user.name}</h3>
+      <h3 className="modal-title">🔐 Cambiar PIN — {user.name}</h3>
       {[["PIN actual", oldPin, setOldPin], ["Nuevo PIN", newPin, setNewPin], ["Confirmar nuevo PIN", conf, setConf]].map(([l, v, s]) => (
         <div key={l}>
           <label className="flabel">{l}</label>
